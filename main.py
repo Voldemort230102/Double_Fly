@@ -155,6 +155,23 @@ def show(title, data, flag):
         pass
     show_products.protocol("WM_DELETE_WINDOW", lambda: quit_this(show_products))
     show_products.mainloop()
+# 初始化
+def init():
+    global home
+    log_path = "./log/{}_log.txt"
+    file_path = ["out","in","new","delete"]
+    for i in file_path:
+        if exists(log_path.format(i)):
+            pass
+        else:
+            open(log_path.format(i), "a", encoding="utf-8").close()
+    information_path = "./information.xlsx"
+    if exists(information_path):
+        pass
+    else:
+        showerror("错误", "没有 information.xlsx 文件！")
+        home.destroy()
+        quit()
 # 首页
 def main():
     global home,width,height,win_width,win_height
@@ -172,6 +189,9 @@ def main():
     # 设置标题
     home.title('Double Fly')
     home.iconbitmap('./icon/icon16.ico')
+
+    # 初始化
+    init()
 
     # 创建菜单栏
     menu = Menu(home)
