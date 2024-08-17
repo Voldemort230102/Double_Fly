@@ -158,6 +158,10 @@ def show(title, data, flag):
 # 初始化
 def init():
     global home
+    if exists("./log"):
+        pass
+    else:
+        mkdir("./log")
     log_path = "./log/{}_log.txt"
     file_path = ["out","in","new","delete"]
     for i in file_path:
