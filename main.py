@@ -1,7 +1,8 @@
 from time import strftime
 from os.path import exists
 from os import mkdir
-from tkinter import Tk,Toplevel,Label,Menu,Entry,Text,Scrollbar,RIGHT,LEFT,Y,END
+from re import match
+from tkinter import Tk,Toplevel,Label,Menu,Entry,Text,Scrollbar,StringVar,RIGHT,LEFT,Y,END
 from tkinter.messagebox import showerror,askquestion
 
 # 各种函数
@@ -81,8 +82,11 @@ def out_log():
     show("出库日志", data, 1)
 
 # 询问窗口
-def ask(tk):
+def ask(tk,ask_text,mod,put_var,title = "询问"):
+    global answer
+    # 打残
     tk.attributes("-disabled", 1)
+    # 设置弹出窗口
     width = 235
     height = 140
     question = Toplevel(tk)
@@ -94,15 +98,35 @@ def ask(tk):
     question.resizable(False,False)
     question.geometry("{}x{}+{}+{}".format(width, height, tk_x + int(tk_width / 2 - width / 2), tk_y + int(tk_height / 2 - height / 2)))
     question.transient(tk)
-    word =
-    answer = Entry(question)
+    # 提示
+    word = Label(question,text = ask_text,font=('kaiti',15, 'bold'))
+    word.pack()
+    # 检测函数
+    def check1(s):
+        if (match(r"\d*", s).group() == s) and len(s) <= 8:
+            return True
+        else:
+            return False
+    ask_var = StringVar()
+    if mod == 1:
+        answer = Entry(question,textvariable=ask_var,validate="key",validatecommand=(question.register(check1), "%P"),font = ('kaiti',20, 'bold'),justify='center')
     answer.pack()
+    answer.focus_set()
+    # 回车返回
+    def ask_return(entry):
+        if put_var == "show_code":
+            print(answer.get())
+            show_code = answer.get()
+            print(show_code)
+        tk.attributes("-disabled", 0)
+        question.destroy()
+    answer.bind("<Return>",ask_return)
     question.protocol("WM_DELETE_WINDOW", void)
     question.mainloop()
 
 # 展示页面
 def show(title, data, flag):
-    global width,height,win_width,win_height
+    global width,height,win_width,win_height,show_code
     # 创建窗口
     show_products = Tk()
     show_products.title(title)
@@ -130,7 +154,8 @@ def show(title, data, flag):
             products = data[1:]
             products = "\n".join(products).split("\n\n")
             print(products)
-            ask(show_products)
+            ask(show_products,"请输入要特定查询的编码",1,"show_code")
+            print(show_code,"out")
         # 字体
         for i in products:
             # 时间
