@@ -6,11 +6,13 @@ from tkinter.messagebox import showerror,askquestion
 
 # 各种函数
 def void():
-    print("void")
+    print("void: pass")
+
 # 关闭
 def quit_this(tk):
     tk.destroy()
     main()
+
 # 记录日志
 def put_log(file):
     # 设置你想检查的文件夹路径
@@ -18,24 +20,24 @@ def put_log(file):
     file_path = folder_path + "/" + file
     # 检查文件夹是否存在
     if exists(folder_path):
-        pass
+        print("put_log: Folder Exist!")
     else:
         # 创建文件夹
         mkdir(folder_path)
         if exists(folder_path):
-            pass
+            print("put_log: Create Folder Successfully!")
         else:
             # 无法创建的提示
             showerror("错误", "文件夹创建失败\n请前往目录手动创建")
             return
     # 检查文件是否存在
     if exists(file_path):
-        pass
+        print("put_log: File Exist!")
     else:
         # 创建文件
         open(file_path, "a",encoding="utf-8").close()
         if exists(file_path):
-            pass
+            print("put_log: Create File Successfully!")
         else:
             # 无法创建的提示
             showerror("错误", "文件夹创建失败\n请前往目录手动创建")
@@ -55,11 +57,14 @@ def put_log(file):
     f = open(file_path, "w", encoding="utf-8")
     f.write(data)
     f.close()
+
 # 出库日志
 def out_log():
     global home,width,height,win_width,win_height
+    # log位置
     file_path = "./log/out_log.txt"
     try:
+        # 尝试读取
         f = open(file_path, "r", encoding="utf-8")
         data = f.read()
         f.close()
@@ -67,20 +72,21 @@ def out_log():
         # 创建文件
         open(file_path, "a", encoding="utf-8").close()
         if exists(file_path):
-            pass
+            print("out_log: Create File Successfully!")
         else:
             # 无法创建的提示
             showerror("错误", "文件创建失败\n请前往目录手动创建")
             return
     home.destroy()
     show("出库日志", data, 1)
+
 # 询问窗口
 def ask(tk):
     tk.attributes("-disabled", 1)
     width = 235
     height = 140
     question = Toplevel(tk)
-    question.title("")
+    question.title("询问")
     tk_width = tk.winfo_width()
     tk_height = tk.winfo_height()
     tk_x = tk.winfo_x()
