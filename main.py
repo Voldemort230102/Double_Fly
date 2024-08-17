@@ -1,7 +1,7 @@
 from time import strftime
 from os.path import exists
 from os import mkdir
-from tkinter import Tk,Toplevel,Label,Menu,Text,Scrollbar,RIGHT,LEFT,Y,END
+from tkinter import Tk,Toplevel,Label,Menu,Entry,Text,Scrollbar,RIGHT,LEFT,Y,END
 from tkinter.messagebox import showerror,askquestion
 
 # 各种函数
@@ -94,7 +94,11 @@ def ask(tk):
     question.resizable(False,False)
     question.geometry("{}x{}+{}+{}".format(width, height, tk_x + int(tk_width / 2 - width / 2), tk_y + int(tk_height / 2 - height / 2)))
     question.transient(tk)
+    word =
+    answer = Entry(question)
+    answer.pack()
     question.protocol("WM_DELETE_WINDOW", void)
+    question.mainloop()
 
 # 展示页面
 def show(title, data, flag):
@@ -114,9 +118,9 @@ def show(title, data, flag):
         show_scrollbar.config(command=show.yview)
         show.config(yscrollcommand=show_scrollbar.set)
         # 询问是否按编码特定查询
-        if_flag = askquestion("提示","请问是否按编码特定查询")
+        if_flag = askquestion("提示","请问是否正常查询？")
         # 确认时
-        if if_flag == "no":
+        if if_flag == "yes":
             # 总数
             data = data.split("\n")
             show.insert(END, data[0] + '\n', 'total_tag')
