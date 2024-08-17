@@ -81,9 +81,13 @@ def out_log():
     home.destroy()
     show("出库日志", data, 1)
 
+# 询问
+# 回车返回
+def ask_return(entry,tk,tkk):
+    tk.attributes("-disabled", 0)
+    tkk.destroy()
 # 询问窗口
-def ask(tk,ask_text,mod,put_var,title = "询问"):
-    global answer
+def ask(tk,ask_text,title = "询问"):
     # 打残
     tk.attributes("-disabled", 1)
     # 设置弹出窗口
@@ -108,39 +112,16 @@ def ask(tk,ask_text,mod,put_var,title = "询问"):
         else:
             return False
     ask_var = StringVar()
-    if mod == 1:
-        answer = Entry(question,textvariable=ask_var,validate="key",validatecommand=(question.register(check1), "%P"),font = ('kaiti',20, 'bold'),justify='center')
+    answer = Entry(question,textvariable=ask_var,validate="key",validatecommand=(question.register(check1), "%P"),font = ('kaiti',20, 'bold'),justify='center')
     answer.pack()
     answer.focus_set()
-    # 回车返回
-    def ask_return(entry):
-        if put_var == "show_code":
-            print(answer.get())
-            show_code = answer.get()
-            print(show_code)
-        tk.attributes("-disabled", 0)
-        question.destroy()
-    answer.bind("<Return>",ask_return)
+    answer.bind("<Return>",lambda e:ask_return(e,tk,question))
     question.protocol("WM_DELETE_WINDOW", void)
     question.mainloop()
-
 # 展示页面
 def show(title, data, flag):
-    global width,height,win_width,win_height,show_code
-    # 创建窗口
-    show_products = Tk()
-    show_products.title(title)
-    show_products.resizable(False,False)
-    show_products.geometry("{}x{}+{}+{}".format(width, height, int(win_width / 2 - width / 2), int(win_height / 2 - height / 2)))
-    show_products.iconbitmap('./icon/icon16.ico')
+    global width,height,win_width,win_height
     if flag:
-        # 滚动条与展示框
-        show_scrollbar = Scrollbar(show_products)
-        show_scrollbar.pack(side=RIGHT, fill=Y)
-        show = Text(show_products, font=('kaiti', 20, 'bold'))
-        show.pack(side=LEFT, fill=Y)
-        show_scrollbar.config(command=show.yview)
-        show.config(yscrollcommand=show_scrollbar.set)
         # 询问是否按编码特定查询
         if_flag = askquestion("提示","请问是否正常查询？")
         # 确认时
@@ -153,9 +134,23 @@ def show(title, data, flag):
             data = data.split("\n")
             products = data[1:]
             products = "\n".join(products).split("\n\n")
-            print(products)
-            ask(show_products,"请输入要特定查询的编码",1,"show_code")
-            print(show_code,"out")
+            show_code = ask(show_products,"请输入要特定查询的编码")
+    else:
+        pass
+    # 创建窗口
+    show_products = Tk()
+    show_products.title(title)
+    show_products.resizable(False,False)
+    show_products.geometry("{}x{}+{}+{}".format(width, height, int(win_width / 2 - width / 2), int(win_height / 2 - height / 2)))
+    show_products.iconbitmap('./icon/icon16.ico')
+    # 滚动条与展示框
+    show_scrollbar = Scrollbar(show_products)
+    show_scrollbar.pack(side=RIGHT, fill=Y)
+    show = Text(show_products, font=('kaiti', 20, 'bold'))
+    show.pack(side=LEFT, fill=Y)
+    show_scrollbar.config(command=show.yview)
+    show.config(yscrollcommand=show_scrollbar.set)
+    if flag:
         # 字体
         for i in products:
             # 时间
