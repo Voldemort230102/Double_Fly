@@ -83,17 +83,23 @@ def out_log():
 
 # 询问
 # 回车返回
-def ask_return(entry,tk,tkk):
+def ask_return(entry):
     tk.attributes("-disabled", 0)
     tkk.destroy()
 # 询问窗口
 def ask(title,ask_text):
     global home,width,height,win_width,win_height
     # 设置弹出窗口
+    # 创建主窗口
+    question_root = Tk()
+    question_root.title("Double Fly")
+    question_root.resizable(False,False)
+    question_root.geometry("{}x{}+{}+{}".format(900, 600, int(win_width / 2 - width / 2), int(win_height / 2 - height / 2)))
+    question_root.iconbitmap('./icon/icon16.ico')
+    question_root.attributes("-disabled", 0)
+    # 弹出子窗口
     width = 235
     height = 140
-    question_root = Tk()
-    question_root.withdraw()
     question = Toplevel(question_root)
     question.deiconify()
     question.title(title)
@@ -114,7 +120,7 @@ def ask(title,ask_text):
     answer = Entry(question,textvariable=ask_var,validate="key",validatecommand=(question.register(check1), "%P"),font = ('kaiti',20, 'bold'),justify='center')
     answer.pack()
     answer.focus_set()
-    answer.bind("<Return>",lambda e:ask_return(e,tk,question))
+    answer.bind("<Return>",lambda e:ask_return(e))
     question.protocol("WM_DELETE_WINDOW", void)
     question.mainloop()
     question_root.mainloop()
@@ -248,6 +254,9 @@ def main():
     about_menu.add_command(label="检查跟新", command=void)
     about_menu.add_separator()
     about_menu.add_command(label="关于我们", command=void)
+
+    # 创建“Double Fly”标题
+    double_fly = Label(home, text="Double Fly")
 
     home.mainloop()
 
