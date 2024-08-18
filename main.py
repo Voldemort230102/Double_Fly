@@ -87,21 +87,20 @@ def ask_return(entry,tk,tkk):
     tk.attributes("-disabled", 0)
     tkk.destroy()
 # 询问窗口
-def ask(tk,ask_text,title = "询问"):
-    # 打残
-    tk.attributes("-disabled", 1)
+def ask(title,ask_text):
+    global home,width,height,win_width,win_height
     # 设置弹出窗口
     width = 235
     height = 140
-    question = Toplevel(tk)
-    question.title("询问")
-    tk_width = tk.winfo_width()
-    tk_height = tk.winfo_height()
-    tk_x = tk.winfo_x()
-    tk_y = tk.winfo_y()
+    question_root = Tk()
+    question_root.withdraw()
+    question = Toplevel(question_root)
+    question.deiconify()
+    question.title(title)
     question.resizable(False,False)
-    question.geometry("{}x{}+{}+{}".format(width, height, tk_x + int(tk_width / 2 - width / 2), tk_y + int(tk_height / 2 - height / 2)))
-    question.transient(tk)
+    question.geometry("{}x{}+{}+{}".format(width, height, int(win_width / 2 - width / 2), int(win_height / 2 - height / 2)))
+    question.iconbitmap('./icon/icon16.ico')
+    question.transient(question_root)
     # 提示
     word = Label(question,text = ask_text,font=('kaiti',15, 'bold'))
     word.pack()
@@ -118,9 +117,12 @@ def ask(tk,ask_text,title = "询问"):
     answer.bind("<Return>",lambda e:ask_return(e,tk,question))
     question.protocol("WM_DELETE_WINDOW", void)
     question.mainloop()
+    question_root.mainloop()
 # 展示页面
 def show(title, data, flag):
     global width,height,win_width,win_height
+    askquestion_root = Tk()
+    askquestion_root.withdraw()
     if flag:
         # 询问是否按编码特定查询
         if_flag = askquestion("提示","请问是否正常查询？")
@@ -134,7 +136,7 @@ def show(title, data, flag):
             data = data.split("\n")
             products = data[1:]
             products = "\n".join(products).split("\n\n")
-            show_code = ask(show_products,"请输入要特定查询的编码")
+            show_code = ask("询问","请输入要特定查询的编码")
     else:
         pass
     # 创建窗口
