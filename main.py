@@ -3,6 +3,7 @@ from os.path import exists
 from os import mkdir
 from re import match
 from tkinter import Tk,Toplevel,Label,Menu,Entry,Text,Scrollbar,StringVar,RIGHT,LEFT,Y,END
+from tkinter.font import Font
 from tkinter.messagebox import showerror,askquestion
 
 # 各种函数
@@ -231,6 +232,9 @@ def main():
     # 设置标题
     home.title('Double Fly')
     home.iconbitmap('./icon/icon16.ico')
+    # 添加新字体
+    hwxk = Font(family="hwxk")
+    hwxk.config(file="D:\Project\Python\Double_Fly\STXINGKA.TTF")
 
     # 初始化
     init()
@@ -256,7 +260,8 @@ def main():
     about_menu.add_command(label="关于我们", command=void)
 
     # 创建“Double Fly”标题
-    double_fly = Label(home, text="Double Fly")
+    double_fly = Label(home, text="Double Fly你好", font=(hwxk, 60, 'bold'))
+    double_fly.pack()
 
     home.mainloop()
 
