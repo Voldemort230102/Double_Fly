@@ -252,7 +252,7 @@ def main():
     about_menu = Menu(menu, tearoff=False)
     menu.add_cascade(label="关于", menu=about_menu)
     about_menu.add_command(label="正版激活", command=void)
-    about_menu.add_command(label="检查跟新", command=void)
+    about_menu.add_command(label="检查更新", command=void)
     about_menu.add_separator()
     about_menu.add_command(label="关于我们", command=void)
 
