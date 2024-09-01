@@ -2,6 +2,7 @@ from time import strftime
 from os.path import exists
 from os import mkdir
 from re import match
+from matplotlib.font_manager import findSystemFonts,FontProperties
 from tkinter import Tk,Toplevel,Label,Menu,Entry,Text,Scrollbar,StringVar,RIGHT,LEFT,Y,END
 from tkinter.font import Font
 from tkinter.messagebox import showerror,askquestion
@@ -194,6 +195,15 @@ def show(title, data, flag):
         pass
     show_products.protocol("WM_DELETE_WINDOW", lambda: quit_this(show_products))
     show_products.mainloop()
+# 是否含义某字体
+def if_have_font(name):
+    fonts = findSystemFonts(fontpaths=None, fontext='ttf')
+    font_names = [FontProperties(fname=font).get_name() for font in fonts]
+    font_names = sorted(set(font_names))
+    for font_name in font_names:
+        if font_name.lower() == name.lower():
+            return True
+    return False
 # 初始化
 def init():
     global home
@@ -213,6 +223,12 @@ def init():
         pass
     else:
         showerror("错误", "没有 information.xlsx 文件！")
+        home.destroy()
+        quit()
+    if if_have_font("STLITI"):
+        pass
+    else:
+        showerror("错误","没有名为 “华文隶书” 的字体")
         home.destroy()
         quit()
 # 首页
